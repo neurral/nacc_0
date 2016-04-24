@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
+  before_filter :check_format
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+
 
   # GET /users
   # GET /users.json
@@ -71,4 +73,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:first_name, :mid_name, :last_name)
     end
+
 end
