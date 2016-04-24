@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160419092248) do
+ActiveRecord::Schema.define(version: 20160424133931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "sessions", force: :cascade do |t|
+    t.string   "session_key"
+    t.datetime "expiration_datetime"
+    t.integer  "user_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "sessions", ["session_key", "created_at"], name: "index_sessions_on_session_key_and_created_at", unique: true, using: :btree
+  add_index "sessions", ["session_key", "expiration_datetime"], name: "index_sessions_on_session_key_and_expiration_datetime", unique: true, using: :btree
+  add_index "sessions", ["user_id"], name: "index_sessions_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
@@ -24,4 +36,5 @@ ActiveRecord::Schema.define(version: 20160419092248) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "sessions", "users"
 end
