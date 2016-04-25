@@ -32,9 +32,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-
+#figaro for configurations
 gem 'figaro'
-
+#okcomputer for rails self check
+#gem 'okcomputer'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

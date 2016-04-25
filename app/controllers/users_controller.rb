@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  before_filter :check_format
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
 
@@ -7,6 +6,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+
   end
 
   # GET /users/1
