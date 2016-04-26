@@ -6,7 +6,6 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
-
   end
 
   # GET /users/1
@@ -27,14 +26,19 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        @user_identity = UserIdentity.new
+        #puts @user.date_start.year.to_s.concat(@user.id.to_s.rjust(6,'0'))
+        @user_identity.user_id = @user.id
+        @user_identity.username = @user.date_start.year.to_s.concat(@user.id.to_s.rjust(6,'0'))
+        @user_identity.password_hash = get_random_string
+        @user_identity.save
+        #format.json { render :show, status: :created, location: @user }
+        format.json {render :create_success, status: :created}
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        #format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.json { render :error, status: :unprocessable_entity }
       end
     end
   end
@@ -71,7 +75,21 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:first_name, :mid_name, :last_name)
+      params.require(:user).permit(
+        :first_name, 
+        :mid_name, 
+        :last_name,
+        :email,
+        :birthday,
+        :cellphone_number,
+        :telephone_number,
+        :address,
+        :date_start
+      )
+    end
+
+    def get_random_string
+      ('a'..'z').to_a.shuffle[0,8].join
     end
 
 end

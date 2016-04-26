@@ -13,4 +13,13 @@ class ApplicationController < ActionController::Base
 			#do something for non json 
 		end
 	end
+
+	def get_random_string
+      ('a'..'z').to_a.shuffle[0,8].join
+    end
+
+
+
+	#TODO: add before_action of checking session_key?
+	#which controllers will inherit?
 end

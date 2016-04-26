@@ -1,0 +1,2 @@
+class UserIdentitiesController < ApplicationController
+end

@@ -3,7 +3,7 @@ class WelcomeController < ApplicationController
   
   def index
   	#NoticeMailer.test_email.deliver_now
-  	@users = User.all
+  	head :ok
   end
 
 
