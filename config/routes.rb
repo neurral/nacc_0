@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'welcome/index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -56,12 +55,13 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  get 'welcome/index'
 
   root 'welcome#index'
 
   #get 'login' => 'sessions#login'
   post 'login' => 'sessions#login' # login,return session_key if successful'
-  post 'validate' => 'sessions#validate' # session_key validate
+  #post 'check' => 'sessions#check' # session_key validate test
   post 'logout' => 'sessions#logout'
 
   get 'register' => 'users#register'
