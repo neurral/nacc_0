@@ -18,8 +18,4 @@ class ApplicationController < ActionController::Base
       ('a'..'z').to_a.shuffle[0,8].join
     end
 
-
-
-	#TODO: add before_action of checking session_key?
-	#which controllers will inherit?
 end
