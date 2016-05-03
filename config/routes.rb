@@ -55,13 +55,14 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
   get 'welcome/index'
 
   root 'welcome#index'
 
   #get 'login' => 'sessions#login'
   post 'login' => 'sessions#login' # login,return session_key if successful'
-  post 'check' => 'sessions#check' # session_key validate test via post
+  get 'check' => 'sessions#check' # session_key validate test via post
   post 'logout' => 'sessions#logout'
 
   # User Management

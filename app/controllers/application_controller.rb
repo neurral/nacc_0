@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 #protect_from_forgery with: :exception
 	protect_from_forgery with: :null_session
 
-
 	def check_format
 		if ENV['nacc_allow_non_json'] == 'no'
  			# render :nothing => true, :status => 406 unless request.format.symbol == :json

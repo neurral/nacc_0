@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
 	before_filter :check_login_params, only: [:login]
 	before_filter :check_session_params, only: [:logout]
+	skip_before_filter :verify_authenticity_token, :only => [:check,:login,:logout]
 	
 	def login
 		respond_to do |format|

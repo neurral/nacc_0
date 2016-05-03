@@ -37,6 +37,9 @@ gem 'figaro'
 #okcomputer for rails self check
 #gem 'okcomputer'
 
+#enable CORS 
+gem 'rack-cors', :require => 'rack/cors'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
