@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 
   #get 'login' => 'sessions#login'
   post 'login' => 'sessions#login' # login,return session_key if successful'
-  get 'check' => 'sessions#check' # session_key validate test via post
+  post 'check' => 'sessions#check' # session_key validate test via post
   post 'logout' => 'sessions#logout'
 
   # User Management
