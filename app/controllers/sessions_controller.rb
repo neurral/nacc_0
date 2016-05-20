@@ -3,6 +3,7 @@ class SessionsController < ApplicationController
 	before_filter :check_session_params, only: [:logout]
 	skip_before_filter :verify_authenticity_token, :only => [:check,:login,:logout]
 	
+
 	def login
 		respond_to do |format|
 			#TODO add conversion for password hash
@@ -93,6 +94,10 @@ class SessionsController < ApplicationController
 				render "_common/errors", status: 401
 			end
 		end
+
+#TODO: change session retrievel from params to header Authorization
+# get session_key from header Authorization, and get username associated in params
+		
 		def check_session_params
 			if session_params[:username].blank?
 				@errors = ['No session provided']
