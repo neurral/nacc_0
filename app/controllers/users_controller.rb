@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
+  before_action :authenticate, only: [:show, :update, :destroy] #add other actions that require session_key
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
 
   # GET /users
   # GET /users.json
@@ -34,7 +34,8 @@ class UsersController < ApplicationController
         @user_identity.username = @user.date_start.year.to_s.concat(@user.id.to_s.rjust(6,'0'))
         @user_identity.password_hash = get_random_string
         @user_identity.save
-        #format.json { render :show, status: :created, location: @user }
+
+        #TODO : send email of login credentials/password
         format.json {render :create_success, status: :created}
       else
         #format.json { render json: @user.errors, status: :unprocessable_entity }

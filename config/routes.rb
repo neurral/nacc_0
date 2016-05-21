@@ -66,9 +66,12 @@ Rails.application.routes.draw do
   post 'logout' => 'sessions#logout'
 
   # User Management
-  # get 'register' => 'users#register'
-  post 'register' => 'users#create'
   #resources :users
+  put 'register' => 'users#create'
+  patch 'users/update/:username' => 'users#update'
+  get 'user' => 'users#list'
+  get 'users/:username' => 'users#show'
+  post 'users/delete' => 'users#deactivate'
 
 
 end

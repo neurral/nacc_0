@@ -38,6 +38,7 @@ class SessionsController < ApplicationController
 	end
 
 	def validate
+		# TODO : session key validation; just return the session info similar to login
 
 	end
 
