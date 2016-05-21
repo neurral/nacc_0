@@ -10,12 +10,13 @@ class SessionsController < ApplicationController
 			@identity = get_identity(login_params[:username], login_params[:password])
 			#TODO add more checks such as of session exists
 			@session = get_active_session(@identity.user_id)
+			expiry_date = Time.now + 1.day # TODO should this be configurable?
 				if @session.nil?
 					@session = Session.new
 					@session.user_id = @identity.user_id
 					#TODO replace this with a secure key generator
 					@session.session_key = get_random_string + get_random_string
-					@session.expiry = Time.now + 1.day
+					@session.expiry = expiry_date
 					@session.active = true
 					if @session.save
 						format.json	{ render :login_success, status: :ok}
@@ -24,7 +25,8 @@ class SessionsController < ApplicationController
 						format.json	{ render "_common/errors", status: 500}
 					end
 				else
-					#session was already created previously
+					#session was already created previously, lets just extend expiration
+					@session.update(expiry: expiry_date)
 					format.json	{ render :login_success, status: :ok}
 				end
 		end
