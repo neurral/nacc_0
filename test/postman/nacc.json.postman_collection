@@ -1,0 +1,80 @@
+{
+	"id": "b2201806-d88c-dbb6-91b2-7fe9b4b0aee0",
+	"name": "nacc",
+	"description": "",
+	"order": [
+		"d10ed84f-b817-69b1-a0a6-c9fece94f46d",
+		"5488a71d-47ea-9272-19e4-c1db8669006e",
+		"7fef2783-3568-83fc-9a16-b051b8e42906"
+	],
+	"folders": [],
+	"timestamp": 1462086227252,
+	"owner": "",
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "5488a71d-47ea-9272-19e4-c1db8669006e",
+			"headers": "",
+			"url": "localhost:3000/check?session[username]=2013000016&session[session_key]=omksupbyytmivxcq",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": null,
+			"dataMode": "params",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462090997808,
+			"name": "localhost:3000/check?session[username]=2013000016&session[session_key]=slbftkxhmqxowdkg",
+			"description": "",
+			"collectionId": "b2201806-d88c-dbb6-91b2-7fe9b4b0aee0",
+			"responses": []
+		},
+		{
+			"id": "7fef2783-3568-83fc-9a16-b051b8e42906",
+			"headers": "",
+			"url": "localhost:3000/logout?session[username]=2013000016&session[session_key]=omksupbyytmivxcqa",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": null,
+			"dataMode": "params",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462091015495,
+			"name": "localhost:3000/logout?session[username]=2013000016&session[session_key]=omksupbyytmivxcqa",
+			"description": "",
+			"collectionId": "b2201806-d88c-dbb6-91b2-7fe9b4b0aee0",
+			"responses": []
+		},
+		{
+			"id": "d10ed84f-b817-69b1-a0a6-c9fece94f46d",
+			"headers": "",
+			"url": "localhost:3000/login?user[username]=2013000016&user[password]=user",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "b2201806-d88c-dbb6-91b2-7fe9b4b0aee0",
+			"data": [
+				{
+					"key": "",
+					"value": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "localhost:3000/login?user[username]=2013000016&user[password]=user",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1462086227252,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		}
+	]
+}

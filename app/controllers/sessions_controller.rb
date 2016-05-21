@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
 					@session = Session.new
 					@session.user_id = @identity.user_id
 					#TODO replace this with a secure key generator
-					@session.session_key = get_random_string + get_random_string
+					@session.session_key = build_session_key # get_random_string + get_random_string
 					@session.expiry = Time.now + 1.day
 					@session.active = true
 					if @session.save
@@ -72,5 +72,12 @@ class SessionsController < ApplicationController
 		def get_active_session(user_id)
 			today = Time.now
 			Session.where("user_id = ? and active = true AND expiry > ? ",user_id,today).take
+		end
+
+		def build_session_key(user_id)
+			begin
+				key = SecureRandom.urlsafe_base64
+			end while Session.where("user_id = ? and session_key = ?",user_id,token).exists?
+			key
 		end
 end
