@@ -85,7 +85,8 @@ class UsersController < ApplicationController
         :cellphone_number,
         :telephone_number,
         :address,
-        :date_start
+        :date_start,
+        :gender
       )
     end
 

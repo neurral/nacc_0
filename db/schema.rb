@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425093012) do
+ActiveRecord::Schema.define(version: 20160521120529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20160425093012) do
     t.string   "address"
     t.binary   "photo"
     t.date     "date_start"
+    t.integer  "gender",           default: 0
   end
 
   add_foreign_key "sessions", "users"

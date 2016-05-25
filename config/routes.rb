@@ -67,7 +67,8 @@ Rails.application.routes.draw do
 
   # User Management
   #resources :users
-  put 'register' => 'users#create'
+  # put 'register' => 'users#create' # TODO fix CORS for OPTIONS
+  post 'register' => 'users#create' 
   patch 'users/update/:username' => 'users#update'
   get 'user' => 'users#list'
   get 'users/:username' => 'users#show'
