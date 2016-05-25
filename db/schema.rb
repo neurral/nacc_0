@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160521120529) do
+ActiveRecord::Schema.define(version: 20160525064643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20160521120529) do
   add_index "user_identities", ["user_id"], name: "index_user_identities_on_user_id", using: :btree
   add_index "user_identities", ["username"], name: "index_user_identities_on_username", unique: true, using: :btree
 
+  create_table "usernames", id: false, force: :cascade do |t|
+    t.integer  "year",       null: false
+    t.integer  "seq",        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "usernames", ["year", "seq"], name: "index_usernames_on_year_and_seq", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "mid_name"
@@ -68,7 +77,12 @@ ActiveRecord::Schema.define(version: 20160521120529) do
     t.binary   "photo"
     t.date     "date_start"
     t.integer  "gender",           default: 0
+    t.string   "token"
+    t.date     "token_expiry"
+    t.integer  "user_type",        default: 0
   end
+
+  add_index "users", ["token"], name: "index_users_on_token", using: :btree
 
   add_foreign_key "sessions", "users"
   add_foreign_key "user_identities", "users"
