@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
 # For APIs, you may want to use :null_session instead.
 #protect_from_forgery with: :exception
 protect_from_forgery with: :null_session
+rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
 def check_format
 	if ENV['nacc_allow_non_json'] == 'no'
@@ -17,6 +18,12 @@ def check_format
 		('a'..'z').to_a.shuffle[0,8].join
 	end
 
+	def build_token
+			#this approach is deprecated. TODO revise using ActiveRecord Secure Token
+			key = SecureRandom.uuid.gsub(/\-/,'')
+	end
+
+
 	protected
 
 	# for controllers aside from session management where a session_key is expected, call
@@ -27,14 +34,25 @@ def check_format
 
 	def authenticate_token
 		authenticate_with_http_token do |token, options|
-			Session.find_by(session_key: token)
+			# Session.find_by(session_key: token)
+			if token.nil?
+				return false
+			else
+			@token = token
+			User.find_by(token: token)
+			# User.where("token = ? AND status != ? AND token_expiry > ? ",token,9,Time.now).take
+			end
 		end
 	end
 
 	def render_unauthorized
 		self.headers['WWW-Authenticate'] = 'Token realm="Application"'
-		@errors = ['Bad credentials']
+		@errors = ['Bad token']
 		render "_common/errors", status: 401
 	end
+
+	def record_not_found
+      render plain: "404 Not Found", status: 404
+    end
 
 end

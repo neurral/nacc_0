@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525064643) do
+ActiveRecord::Schema.define(version: 20160525072132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,11 +78,13 @@ ActiveRecord::Schema.define(version: 20160525064643) do
     t.date     "date_start"
     t.integer  "gender",           default: 0
     t.string   "token"
-    t.date     "token_expiry"
+    t.datetime "token_expiry"
     t.integer  "user_type",        default: 0
+    t.string   "username"
   end
 
   add_index "users", ["token"], name: "index_users_on_token", using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   add_foreign_key "sessions", "users"
   add_foreign_key "user_identities", "users"

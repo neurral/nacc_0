@@ -61,9 +61,15 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   #get 'login' => 'sessions#login'
-  post 'login' => 'sessions#login' # login,return session_key if successful'
-  post 'check' => 'sessions#check' # session_key validate test via post
-  post 'logout' => 'sessions#logout'
+  # post 'login' => 'sessions#login' # login,return session_key if successful'
+  # post 'check' => 'sessions#check' # session_key validate test via post
+  # post 'logout' => 'sessions#logout'
+
+  post 'login' => 'users#login' # login,return session_key if successful'
+  post 'logout' => 'users#logout'
+  post 'request-token/:username' => 'users#request_token'
+  # get 'in/:username/:token' => 'users#activate_token'
+  post 'in' => 'users#activate_token' #should have an equivalent in frontend
 
   # User Management
   #resources :users

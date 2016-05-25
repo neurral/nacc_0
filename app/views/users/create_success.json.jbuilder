@@ -1,6 +1,9 @@
-json.extract! @user_identity, :username
-json.extract! @user, :status,
-		:first_name, 
+json.extract! @user, 
+        :username,
+        :token,
+        :token_expiry,
+        :status,
+	:first_name, 
         :mid_name, 
         :last_name,
         :email,
