@@ -21,3 +21,5 @@
 
 #ignore postman collection
 /test/postman
+# Ignore application configuration
+/config/application.yml

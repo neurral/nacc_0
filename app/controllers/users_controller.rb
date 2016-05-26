@@ -27,11 +27,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.token = build_token # TODO ensure uniqueness!
-    @user.token_expiry = Time.now + 1.day
+    @user.token_expiry = ''
     @user.username = next_username(@user.date_start.year)
     respond_to do |format|
       if @user.save
-        #TODO : send email of login credentials/password
+        # TODO : send email of login credentials/password
+        TokenMailer.accesstoken_email(@user).deliver_now
         format.json {render :create_success, status: :created}
       else
         #format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -48,7 +49,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
-        format.html { render :edit }
+        # format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -67,6 +68,7 @@ class UsersController < ApplicationController
   def login
     respond_to do |format|
       @user = User.where("username = ? AND token = ? AND status != ? AND token_expiry > ? ",user_params[:username],@token,9,Time.now).take
+      #TODO return errors
       format.json {render :create_success, status: :ok}
     end
   end
@@ -83,27 +85,52 @@ class UsersController < ApplicationController
 
   def request_token
     @user = User.find_by username: params[:username]
-    #generate new token
-    @user.token = build_token
-    @user.token_expiry = ''
-    @user.save
-    #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email)
-    #email token link to user
     respond_to do |format|
-      format.json {render :request_success, status: :accepted}
+      if @user
+        #generate new token
+        @user.token = build_token
+        @user.token_expiry = ''
+        @user.save
+        #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email)
+        #email token link to user
+        TokenMailer.accesstoken_email(@user).deliver_now
+        format.json {render :request_success, status: :accepted}
+      else
+        @errors = ['Unknown user']
+        format.json { render "_common/errors", status: 404 }
+      end
     end
   end
 
   def activate_token
     @user = User.find_by username: params[:username], token: params[:token]
     respond_to do |format|
-      if @user.terminated?
-          @errors = ["User account already terminated"]
+      if @user
+        if @user.status == "active"
+          if @user.token_expiry.blank?
+            @user.token_expiry = Time.now + 1.day
+            @user.save
+          elsif @user.token_expiry < Time.now
+            @errors = ["Your token has expired."]
+            format.json { render "_common/errors", status: 404}
+          end
+          format.json {render :activate_success, status: :ok}
+        else
+          case @user.status
+          when "for_auth"
+            @errors = ["This user account still needs to be verified by an administrator."]
+          when "inactive"
+            @errors = ["This user account is temporarily deactivated."]
+          when "terminated"
+            @errors = ["This user account is already terminated."]
+          else 
+            @errors = ["Activation request invalid. Please try requesting a new token."]
+          end
           format.json { render "_common/errors", status: 401}
-      else @user.token_expiry.blank?
-        @user.token_expiry = Time.now + 1.day
-        @user.save
-        format.json {render :activate_success, status: :ok}
+        end
+      else #no user found
+          @errors = ["Unknown user"]
+          format.json { render "_common/errors", status: 404}
       end
     end
   end

@@ -23,6 +23,9 @@ def check_format
 			key = SecureRandom.uuid.gsub(/\-/,'')
 	end
 
+	def record_not_found
+      render json: "404 Not Found", status: 404
+    end
 
 	protected
 
@@ -35,10 +38,14 @@ def check_format
 	def authenticate_token
 		authenticate_with_http_token do |token, options|
 			# Session.find_by(session_key: token)
+			puts "Token:"+token
 			if token.nil?
+				puts "nil token"
 				return false
 			else
-			@token = token
+				#add the token as a class variable so we can use it in UserController
+				@token = token
+				puts token
 			User.find_by(token: token)
 			# User.where("token = ? AND status != ? AND token_expiry > ? ",token,9,Time.now).take
 			end
@@ -47,12 +54,8 @@ def check_format
 
 	def render_unauthorized
 		self.headers['WWW-Authenticate'] = 'Token realm="Application"'
-		@errors = ['Bad token']
+		@errors = ['Bad/missing token']
 		render "_common/errors", status: 401
 	end
-
-	def record_not_found
-      render plain: "404 Not Found", status: 404
-    end
 
 end

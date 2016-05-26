@@ -68,8 +68,7 @@ Rails.application.routes.draw do
   post 'login' => 'users#login' # login,return session_key if successful'
   post 'logout' => 'users#logout'
   post 'request-token/:username' => 'users#request_token'
-  # get 'in/:username/:token' => 'users#activate_token'
-  post 'in' => 'users#activate_token' #should have an equivalent in frontend
+  post 'in/:username' => 'users#activate_token' #should have an equivalent in frontend
 
   # User Management
   #resources :users
