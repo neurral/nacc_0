@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
   before_action :authenticate, only: [:show, :update, :destroy, :login, :logout] #add other actions that require session_key
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  # before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+   User_status_access_errors = { 
+    for_auth: "This user account still needs to be verified by an administrator.", 
+    # active: "",
+    inactive: "This user account has been deactivated.",
+    terminated: "This user account is already terminated."
+  }
 
   # GET /users
   # GET /users.json
@@ -28,7 +35,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.token = build_token # TODO ensure uniqueness!
     @user.token_expiry = ''
-    @user.username = next_username(@user.date_start.year)
+    @user.username = Username.next_username_in(@user.date_start.year.to_i)
     respond_to do |format|
       if @user.save
         # TODO : send email of login credentials/password
@@ -66,10 +73,29 @@ class UsersController < ApplicationController
   end
 
   def login
+
+
     respond_to do |format|
-      @user = User.where("username = ? AND token = ? AND status != ? AND token_expiry > ? ",user_params[:username],@token,9,Time.now).take
-      #TODO return errors
-      format.json {render :create_success, status: :ok}
+      # @user = User.where("username = ? AND token = ? AND status != ? AND token_expiry > ? ",user_params[:username],@token,9,Time.now).take
+      #TODO make sure that tokens are correct and unique udring generation
+      @user = User.where("token = ?",@token).take
+      # puts "STATUS!!!!!!!!!!" + @user.status
+      # puts "ERRORL" + User_status_access_errors[@user.status.to_sym]
+      if @user.nil? || @user.username != user_params[:username]
+        @errors = ["Bad/invalid token"]
+      elsif @user.token_expiry.blank?
+        @errors = ["Token not yet activated. Please open access link from your email."]
+      elsif @user.token_expiry < Time.now
+        @errors = ["Expired token"] 
+      elsif User_status_access_errors.key?(@user.status.to_sym)
+        @errors = [User_status_access_errors[@user.status.to_sym]]
+      end
+
+      if @errors
+        format.json { render "_common/errors", status: 401 }
+      else
+        format.json {render :create_success, status: :ok }
+      end 
     end
   end
 
@@ -87,14 +113,18 @@ class UsersController < ApplicationController
     @user = User.find_by username: params[:username]
     respond_to do |format|
       if @user
-        #generate new token
-        @user.token = build_token
-        @user.token_expiry = ''
-        @user.save
-        #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email)
-        #email token link to user
-        TokenMailer.accesstoken_email(@user).deliver_now
-        format.json {render :request_success, status: :accepted}
+        if @user.terminated? || @user.inactive? 
+            @errors = [User_status_access_errors[@user.status.to_sym]]
+            format.json { render "_common/errors", status: 401 }
+        else
+          #generate new token
+          @user.token = build_token
+          #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email?)
+          @user.token_expiry = ''
+          @user.save
+          TokenMailer.accesstoken_email(@user).deliver_now
+          format.json {render :request_success, status: :accepted}
+        end
       else
         @errors = ['Unknown user']
         format.json { render "_common/errors", status: 404 }
@@ -116,13 +146,8 @@ class UsersController < ApplicationController
           end
           format.json {render :activate_success, status: :ok}
         else
-          case @user.status
-          when "for_auth"
-            @errors = ["This user account still needs to be verified by an administrator."]
-          when "inactive"
-            @errors = ["This user account is temporarily deactivated."]
-          when "terminated"
-            @errors = ["This user account is already terminated."]
+          if User_status_access_errors.key?(@user.status.to_sym)
+            @errors = [User_status_access_errors[@user.status.to_sym]]
           else 
             @errors = ["Activation request invalid. Please try requesting a new token."]
           end
@@ -157,19 +182,5 @@ class UsersController < ApplicationController
         :gender
       )
     end
-
-    #todo move this to Usernames controller?
-    def next_username(year)
-      lastusername = Username.find_by! year: year
-      if lastusername
-        lastusername.seq = lastusername.seq+1
-        lastusername.save
-      end
-      lastusername.year.to_s.concat(lastusername.seq.to_s.rjust(4,'0'))
-    rescue ActiveRecord::RecordNotFound
-      lastusername = Username.create(:year => year, :seq => 1)
-      lastusername.year.to_s.concat(lastusername.seq.to_s.rjust(4,'0'))
-    end
-
 
 end

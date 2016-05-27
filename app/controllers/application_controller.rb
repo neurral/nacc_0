@@ -24,7 +24,7 @@ def check_format
 	end
 
 	def record_not_found
-      render json: "404 Not Found", status: 404
+      render json: "{Not Found}", status: 404
     end
 
 	protected

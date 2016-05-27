@@ -9,4 +9,7 @@ class User < ActiveRecord::Base
 	enum user_type: {guest: 0, employee: 1, exec: 2, sysadmin: 3}
 	validates :first_name, presence: true
 
+ 
+
+
 end

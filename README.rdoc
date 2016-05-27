@@ -1,28 +1,32 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# NACC v.0 #
+This is an experimental API developed in Ruby on Rails.
+Its purpose is to provide a core module for backend and ddatabase management for a frontend system.
+This is developed in Windows, using Sublime, Git Bash, PostGres (pgAdmin), and deployed in Heroku.
 
-Things you may want to cover:
+==== Features
+* User Management (Register, Approval, Activation, Token-based Authentication)
+* Records Management (TBD - This depends on what app is to be developed, e.g. Employee Management, etc.)
 
-* Ruby version
 
-* System dependencies
 
+#Architecture:#
+_currently untested in others_
+* Cedar Stack `cedar-14`
+* Rails version `rails 4.2.6`
+* Ruby version `ruby 2.2.4p230 (2015-12-16 revision 53155) [i386-mingw32]`
+* Database `postgres 9.4`
+* Data served as `application\json`
+* Email notifications use SendGrid in Heroku
+
+== 
+_Documentation to be updated_
+* JSON API calls and response
 * Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
 * Deployment instructions
-
+* System dependencies
+* Test Suites
 * ...
 
-
-Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
