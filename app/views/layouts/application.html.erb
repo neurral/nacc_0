@@ -1,14 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title>Nacc0</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+<head lang="en">
+	<title>Neurral API - NACC Prototype</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<%= csrf_meta_tags %>
 </head>
 <body>
+	<nav class="navbar navbar-inverse" >
+		<div class="container-fluid" >
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" id="neurral-brand" href="/" title="nucleus acclumbens">neurral \\\ <span  id="neurral-sub">nacc</span></a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li><a href="https://github.com/neurral/nacc_0">Github</a></li>
+					<li><a href="https://github.com/neurral/nacc_0/wiki">Wiki</a></li>
+					<li><a href="#"><span class="glyphicon glyphicon-sunglasses"></span> Visit LEUZIN</a></li>
+					<!-- <li><a href="#">Page 2</a></li>
+					<li><a href="#">Page 3</a></li> -->
+				</ul>
 
-<%= yield %>
+				<!-- <ul class="nav navbar-nav navbar-right" id="outside-menu">
+					<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Visit LEUZIN</a></li>
+				</ul> -->
+			</div>
+		</div>
+	</nav>
 
+
+	<div class="container">
+		<noscript><br /><br /><div class="alert alert-danger" role="alert">Please note: Javascript is required to access the Neurral front-end (LEUZIN).</div></noscript>
+		<br />
+		<%= yield %>
+	</div>
+
+	<footer class="navbar navbar-fixed-bottom navbar-inverse">			
+		<sub style="color: gray;"> &copy; 2016 Neurral. Any rights reserved.</sub>
+	</footer>
 </body>
 </html>

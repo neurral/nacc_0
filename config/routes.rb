@@ -57,7 +57,6 @@ Rails.application.routes.draw do
   #   end
 
   get 'welcome/index'
-
   root 'welcome#index'
 
   #get 'login' => 'sessions#login'
