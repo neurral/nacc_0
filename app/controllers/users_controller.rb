@@ -9,28 +9,6 @@ class UsersController < ApplicationController
     terminated: "This user account is already terminated."
   }
 
-  # GET /users
-  # GET /users.json
-  def index
-    @users = User.all
-  end
-
-  # GET /users/1
-  # GET /users/1.json
-  def show
-  end
-
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-
-  # GET /users/1/edit
-  def edit
-  end
-
-  # POST /users
-  # POST /users.json
   def create
     @user = User.new(user_params)
     @user.token = build_token # TODO ensure uniqueness!
@@ -48,8 +26,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
       if @user.update(user_params)
@@ -62,8 +38,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.json
   def destroy
     @user.destroy
     respond_to do |format|
@@ -73,8 +47,6 @@ class UsersController < ApplicationController
   end
 
   def login
-
-
     respond_to do |format|
       # @user = User.where("username = ? AND token = ? AND status != ? AND token_expiry > ? ",user_params[:username],@token,9,Time.now).take
       #TODO make sure that tokens are correct and unique udring generation
@@ -120,7 +92,7 @@ class UsersController < ApplicationController
           #generate new token
           @user.token = build_token
           #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email?)
-          @user.token_expiry = ''
+          # @user.token_expiry = ''
           @user.save
           TokenMailer.accesstoken_email(@user).deliver_now
           format.json {render :request_success, status: :accepted}
@@ -136,16 +108,28 @@ class UsersController < ApplicationController
     @user = User.find_by username: params[:username], token: params[:token]
     respond_to do |format|
       if @user
-        if @user.status == "active"
+        if @user.active?
+          #expiry is uninitialized, this is from email
           if @user.token_expiry.blank?
             @user.token_expiry = Time.now + 1.day
             @user.save
+            format.json {render :activate_success, status: :ok}  
+          #already initialized, lets check if expired
           elsif @user.token_expiry < Time.now
             @errors = ["Your token has expired."]
             format.json { render "_common/errors", status: 404}
+          #already initialized, not yet expired, this means this has been already activated somewhere.
+          #the activation link cannot be used again.
+          #either generate a new one or login in that device where this token is set (presuming it was not yet destroyed there).
+          else 
+            #user hsould have used the login
+            @errors = ["Token already activated. Try to login instead, or request a new token."]
+            # lets return a conflict
+            format.json { render "_common/errors", status: 409}
           end
-          format.json {render :activate_success, status: :ok}
+
         else
+          # user not active
           if User_status_access_errors.key?(@user.status.to_sym)
             @errors = [User_status_access_errors[@user.status.to_sym]]
           else 
