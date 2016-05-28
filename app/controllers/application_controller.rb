@@ -55,8 +55,8 @@ def check_format
 	end
 
 	def render_unauthorized
-		self.headers['WWW-Authenticate'] = 'Token realm="Application"'
-		@errors = ['Bad/missing token']
+		self.headers['WWW-Authenticate'] = 'Token realm="NeurralToken"'
+		@errors = ['Invalid username/token']
 		render "_common/errors", status: 401
 	end
 
