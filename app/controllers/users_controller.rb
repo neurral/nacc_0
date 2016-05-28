@@ -96,7 +96,7 @@ class UsersController < ApplicationController
           #generate new token
           @user.token = build_token
           #leave token_expiry as blank? (if blank, do not recreate new token to prevent spamming email?)
-          # @user.token_expiry = ''
+          @user.token_expiry = ''
           @user.save
           TokenMailer.accesstoken_email(@user).deliver_now
           format.json {render :request_success, status: :accepted}
