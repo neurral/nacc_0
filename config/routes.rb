@@ -59,6 +59,12 @@ Rails.application.routes.draw do
   get 'welcome/index'
   root 'welcome#index'
 
+  #Documentation by RDoc
+  # map.connect "/docs/:file_or_folder", :controller => :docs, :action => :get_file, :file_or_folder => /.*/
+  # map.resources :docs, :only => :get_file
+  get "/docs/:file_or_folder", :controller => :docs, :action => :get_file, :file_or_folder => /.*/
+  resources :docs, :only => :get_file
+
   #get 'login' => 'sessions#login'
   # post 'login' => 'sessions#login' # login,return session_key if successful'
   # post 'check' => 'sessions#check' # session_key validate test via post
@@ -77,6 +83,5 @@ Rails.application.routes.draw do
   get 'user' => 'users#list'
   get 'users/:username' => 'users#show'
   post 'users/delete' => 'users#deactivate'
-
 
 end

@@ -11,17 +11,17 @@ This is developed in Windows, using Sublime, Git Bash, PostGres (pgAdmin), and d
 
 
 
-#Architecture:#
+==== Architecture
 _currently untested in others_
-* Cedar Stack `cedar-14`
-* Rails version `rails 4.2.6`
-* Ruby version `ruby 2.2.4p230 (2015-12-16 revision 53155) [i386-mingw32]`
-* Database `postgres 9.4`
-* Data served as `application\json`
+* Cedar Stack <tt>cedar-14</tt>
+* Rails version <tt>rails 4.2.6</tt>
+* Ruby version <tt>ruby 2.2.4p230 (2015-12-16 revision 53155) [i386-mingw32]</tt>
+* Database <tt>postgres 9.4</tt>
+* Data served as <tt>application\json</tt>
 * Email notifications use SendGrid in Heroku
 
-== 
-_Documentation to be updated_
+== Documentation 
+_to be updated_
 * JSON API calls and response
 * Configuration
 * Deployment instructions
