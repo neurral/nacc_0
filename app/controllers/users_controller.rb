@@ -2,12 +2,13 @@ class UsersController < ApplicationController
   before_action :authenticate, only: [:show, :update, :destroy, :login, :logout] #add other actions that require session_key
   # before_action :set_user, only: [:show, :edit, :update, :destroy]
 
-   User_status_access_errors = { 
+  User_status_access_errors = { 
     for_auth: "This user account still needs to be verified by an administrator.", 
     # active: "",
     inactive: "This user account has been deactivated.",
     terminated: "This user account is already terminated."
   }
+  User_token_expiry_extension = 1.day
 
   def create
     @user = User.new(user_params)
@@ -66,6 +67,8 @@ class UsersController < ApplicationController
       if @errors
         format.json { render "_common/errors", status: 401 }
       else
+        #user is ok, lets extend the expiry
+        @user.token_expiry = Time.now + User_token_expiry_extension
         format.json {render :create_success, status: :ok }
       end 
     end
@@ -111,7 +114,7 @@ class UsersController < ApplicationController
         if @user.active?
           #expiry is uninitialized, this is from email
           if @user.token_expiry.blank?
-            @user.token_expiry = Time.now + 1.day
+            @user.token_expiry = Time.now + User_token_expiry_extension
             @user.save
             format.json {render :activate_success, status: :ok}  
           #already initialized, lets check if expired
