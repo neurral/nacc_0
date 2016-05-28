@@ -1,12 +1,11 @@
 class NoticeMailer < ApplicationMailer
-default from: ENV['nacc_mail_address']
+default from:  %("Neurral Notifications" < #{ENV['nacc_mail_from']}>)
  
-  def welcome_email(user)
-    @url  = 'http://example.com/login'
-    mail(to: @user.email, subject: 'Welcome to My Awesome Site')
+  def register_email(user)
+    @user = user
+    @help_mail = "support@#{ENV['nacc_mail_domain']}"
+    email_with_name = %("#{@user.first_name}  #{@userlast_name}" <#{@user.email}>)
+	mail(to: email_with_name, subject: 'Neurral-Leuzin: Your registration')
   end
 
-  def test_email
-    mail(to: 'la.f.bermejo@gmail.com', subject: 'WTest emal')
-  end
 end

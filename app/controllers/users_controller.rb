@@ -17,8 +17,9 @@ class UsersController < ApplicationController
     @user.username = Username.next_username_in(@user.date_start.year.to_i)
     respond_to do |format|
       if @user.save
-        # TODO : send email of login credentials/password
-        TokenMailer.accesstoken_email(@user).deliver_now
+        # TODO : send email of user info
+        # TokenMailer.accesstoken_email(@user).deliver_now
+        NoticeMailer.register_email(@user).deliver_now
         format.json {render :create_success, status: :created}
       else
         #format.json { render json: @user.errors, status: :unprocessable_entity }

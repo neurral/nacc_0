@@ -1,0 +1,58 @@
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+</style>
+<h1>Welcome to Neurral, <%= @user.first_name %>! We are pleased to have you onboard.</h1>
+
+<p>
+  <strong>
+    Currently, your account is being verified by the administrators.</strong>
+    You will receive another email on how to login when your account is approved.
+  </p>
+
+  <p>
+    In the meanwhile, you may review the information you submitted below. If you notice any discrepancies, you can send an email to: <%= @help_mail =%>.
+  </p>
+  <p>
+    <table style="width:100%">
+      <caption><h3>Account Information</h3></caption>
+
+      <tr>
+        <td><strong>Name</strong></td>
+        <td><%= "#{@user.first_name} #{@user.mid_name} #{@user.last_name} "%></td>
+      </tr>
+      <tr>
+ <!--      <td><strong>Gender</strong></td>
+      <td><%#= {prefer_not_to_disclose: "Prefer not to disclose", male: "Male", female: "Female", not_sure: "Not Sure"}[@user.gender.to_sym] %></td>
+    </tr>
+    <tr>
+      <td><strong>Birthday</strong></td>
+      <td><%#= Time.parse(@user.birthday?.to_s).strftime('%F') %></td>
+    </tr>
+    <tr>
+      <td><strong>Address</strong></td>
+      <td><%#= @user.address %></td>
+    </tr>
+    <tr>
+      <td><strong>Cellphone Number</strong></td>
+      <td><%#= @user.cellphone_number %></td>
+    </tr>
+    <tr>
+      <td><strong>Telephone Number</strong></td>
+      <td><%#= @user.telephone_number %></td>
+    </tr>
+    <tr> -->
+      <td><strong>Email Address</strong></td>
+      <td><%= @user.email %></td>
+    </tr>
+    <tr>
+      <td><strong>Date Registered</strong></td>
+      <td><%= @user.created_at.strftime('%H:%M:%S %F %Z') %></td>
+    </tr>
+  </table>
+</p>
