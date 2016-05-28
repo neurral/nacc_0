@@ -4,6 +4,12 @@ class ApplicationController < ActionController::Base
 #protect_from_forgery with: :exception
 protect_from_forgery with: :null_session
 rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+before_action :destroy_session
+
+def destroy_session
+	request.session_options[:skip] = true
+end
+
 
 @url = ENV['frontend_hostname']
 
@@ -23,13 +29,13 @@ def check_format
 	def build_token
 			#this approach is deprecated. TODO revise using ActiveRecord Secure Token
 			key = SecureRandom.uuid.gsub(/\-/,'')
-	end
+		end
 
-	def record_not_found
-      render json: "{Not Found}", status: 404
-    end
+		def record_not_found
+			render json: "{Not Found}", status: 404
+		end
 
-	protected
+		protected
 
 	# for controllers aside from session management where a session_key is expected, call
 	# :authenticate method as a before_action
@@ -48,16 +54,16 @@ def check_format
 				#add the token as a class variable so we can use it in UserController
 				@token = token
 				puts token
-			User.find_by(token: token)
+				User.find_by(token: token)
 			# User.where("token = ? AND status != ? AND token_expiry > ? ",token,9,Time.now).take
-			end
 		end
 	end
+end
 
-	def render_unauthorized
-		self.headers['WWW-Authenticate'] = 'Token realm="NeurralToken"'
-		@errors = ['Invalid username/token']
-		render "_common/errors", status: 401
-	end
+def render_unauthorized
+	self.headers['WWW-Authenticate'] = 'Token realm="NeurralToken"'
+	@errors = ['Invalid username/token']
+	render "_common/errors", status: 401
+end
 
 end
