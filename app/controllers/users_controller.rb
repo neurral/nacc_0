@@ -77,10 +77,13 @@ class UsersController < ApplicationController
 
   def logout
     respond_to do |format|
-      @user.token = build_token
-      @user.token_expiry = ''
-      if @user.save
-          format.json {render :logout_success, status: :ok}
+      @user = User.where("token = ? AND username = ?",@token,user_params[:username]).take
+      
+      if @user
+        @user.token = ''
+        @user.token_expiry = ''
+        @user.save
+        format.json {render :logout_success, status: :ok}
       end
     end
   end
