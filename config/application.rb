@@ -27,7 +27,7 @@ module Nacc0
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:put, :get, :post, :options]
+        resource '*', :headers => :any, :methods => [:options, :put, :get, :post, :patch]
       end
     end
 
